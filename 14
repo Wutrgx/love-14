@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>วงล้อสุ่มเงิน วาเลนไทน์ 💖</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+        body {
+            font-family: 'Pacifico', cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to bottom, #ffb6c1, #ff69b4);
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 182, 193, 0.9);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0px 0px 15px rgba(255, 105, 180, 0.7);
+        }
+
+        h1 {
+            color: #ff1493;
+            font-size: 28px;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 8px solid #ff69b4;
+            background: conic-gradient(#ff99cc 0% 25%, #ff66b2 25% 50%, #ff99cc 50% 75%, #ff66b2 75% 100%);
+            position: relative;
+            transition: transform 4s ease-out;
+        }
+
+        .arrow {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAdCAYAAACtWi06AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABx0lEQVRIDbWWQU7DMBBF7wAVABXABTABVABXABXABXABXABXABXABXABXABXABXABXABXABf+ljY26XHJ2c3NwLCe+63p+YmLun//bMmJycx6P04kJuF4FftcPWBhzAMjOdloG6HgEfY/sPKqqoafecPptUbWnMFadE15Q1apexAz5VgEX2rWgTLcKZoFVRBXIo+12VpXhUAEX1qSgg99U20FUFfAIquhZn/uc4TFXArECqkpA2WyrpVb1+AZCqrgG6T/JBzPwGTcxEdpKxvLO84PKMSPyrXHNCuAfQnzGZnoTAHaegLYIylauI12eb6ACaoHCCWdf4AqVMaeQCFABzVS5qhFf1VBiT0LEF8K2Mz1SgmI7C7dCVCrv14BBOBjShJkEMF64jPSaOgBJ8dAGyVpBYLOIkVSWepSWjGSwCby0a8sCbU93RSc02XSlspgJSYTIgAgQjBNiMiTkxhWJsZax9HPQHyz7OodlixGz97F4iZ9qap6ZdyGpg5YJXaOQF4Ul2DsBVdeB7aZCzDb06S/lwMRXgqFGR7VVrwAAAABJRU5ErkJggg==') no-repeat center/contain;
+        }
+
+        .spin-btn {
+            background-color: #ff1493;
+            border: none;
+            padding: 15px 30px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 10px;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .spin-btn:hover {
+            background-color: #ff66b2;
+            transform: scale(1.1);
+        }
+
+        /* ป๊อปอัพ */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            font-size: 22px;
+            color: #d6006c;
+            animation: popupFade 0.5s ease-out forwards;
+        }
+
+        @keyframes popupFade {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .popup button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #ff69b4;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .popup button:hover {
+            background-color: #ff1493;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💖 วงล้อเสี่ยงโชควันวาเลนไทน์ 💖</h1>
+        <div class="wheel-container">
+            <div class="wheel" id="wheel"></div>
+            <div class="arrow"></div>
+        </div>
+        <button class="spin-btn" onclick="spinWheel()">💘 หมุนวงล้อ 💘</button>
+    </div>
+
+    <div class="popup" id="popup">
+        <p id="popupMessage">🎉 คุณได้: 0 บาท 🎉</p>
+        <button onclick="closePopup()">ตกลง</button>
+    </div>
+
+    <script>
+        function spinWheel() {
+            const wheel = document.getElementById('wheel');
+            const popup = document.getElementById('popup');
+            const popupMessage = document.getElementById('popupMessage');
+
+            // สุ่มมุมหมุน (ระหว่าง 1000 - 5000 องศา)
+            const randomAngle = Math.floor(Math.random() * 4000) + 1000;
+
+            // หมุนวงล้อ
+            wheel.style.transition = 'transform 4s ease-out';
+            wheel.style.transform = `rotate(${randomAngle}deg)`;
+
+            // แสดงผลลัพธ์ในป๊อปอัพ
+            setTimeout(() => {
+                const result = Math.floor((randomAngle % 360) / 90);
+                const results = ["100 บาท", "200 บาท", "300 บาท", "500 บาท"];
+                popupMessage.textContent = `🎉 คุณได้: ${results[result]} 🎉`;
+                popup.style.display = 'block';
+            }, 4000);
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+
